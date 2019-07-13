@@ -11,12 +11,16 @@ app.get('/', (req, res) => {
 	fs.readdir('public/images/', function(err, files) {
 		if (err) {
 			console.log(err);
-			res.render('photos', { lang: lang });
+			res.render('index');
 		} else {
 			var imgFiles = files.filter(el => /\.jpg$/.test(el));
 			res.render('index', { images: imgFiles});
 		}
 	});	
+});
+
+app.get('/upload',(req,res)=>{
+	res.render('upload');
 });
 
 app.listen(3000, () => {
