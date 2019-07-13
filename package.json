@@ -1,0 +1,19 @@
+{
+  "name": "drag-drop-image",
+  "version": "1.0.0",
+  "description": "upload and sort pictures by drag & drop",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "bes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bahadiremre/drag-drop-image/issues"
+  },
+  "homepage": "https://github.com/bahadiremre/drag-drop-image#readme",
+  "dependencies": {
+    "ejs": "^2.6.2",
+    "express": "^4.17.1"
+  }
+}

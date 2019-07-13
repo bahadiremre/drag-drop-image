@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<style>
+		body {
+			background-color: #eee;
+		}
+
+		.divImgContainer {
+			float: left;
+			width: 100px;
+			height: 100px;
+			margin: 10px;
+			padding: 10px;
+			border: 1px solid black;
+		}
+		img{
+			width:100%;
+		}
+	</style>
+	<script>
+		function allowDrop(ev) {
+			ev.preventDefault();
+		}
+
+		function drag(ev) {
+			ev.dataTransfer.setData('imageId', ev.currentTarget.id);
+			ev.dataTransfer.setData('parentDivId', ev.currentTarget.parentElement.id);
+		}
+
+		function drop(ev) {
+			ev.preventDefault();
+			var imageId = ev.dataTransfer.getData('imageId'),
+				parentDivId = ev.dataTransfer.getData('parentDivId');
+			document.getElementById(parentDivId).appendChild(ev.currentTarget.querySelectorAll('img')[0])
+			ev.currentTarget.appendChild(document.getElementById(imageId));
+		}
+	</script>
+</head>
+
+<body>
+
+	<h2>Drag and Drop</h2>
+
+	<%  if(images){
+            images.forEach((image,index) => { %>
+
+		<div ondrop="drop(event)" ondragover="allowDrop(event)" class='divImgContainer' id='div<%= index+1 %>'>
+			<img src="<%= "images/" + image %>" draggable="true" ondragstart="drag(event)" id="drag<%= image.replace('.jpg','') %>">
+		</div>
+
+		<%  });
+            } %>
+
+</body>
+
+</html>
