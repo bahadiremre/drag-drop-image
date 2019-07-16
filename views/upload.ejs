@@ -7,14 +7,14 @@
 			position: relative;
 			overflow: hidden;
 			width: 300px;
-			height: 350px;
-			background: #f3f3f3;
+			height: 300px;
+			background: #466;
 			border: 2px dashed #e8e8e8;
 		}
 
 		#filePhoto {
 			position: absolute;
-			width: 300px;
+			width: 400px;
 			height: 400px;
 			top: -50px;
 			left: 0;
@@ -24,40 +24,40 @@
 		}
 
 		.uploader img {
-			position: absolute;
-			width: 302px;
-			height: 352px;
-			top: -1px;
-			left: -1px;
-			z-index: 1;
-			border: none;
+			width: 100px;
+			margin: 2px;
+			float: left;
 		}
 	</style>
-	
+
 </head>
+
 <body>
-	<div class="uploader" onclick="$('#filePhoto').click()">
-		click here or drag here your images for preview and set userprofile_picture data
-		<img src="" />
-		<input type="file" name="userprofile_picture" id="filePhoto" require multiple/>
-	</div>
+	<form enctype="multipart/form-data" action="upload" method="post">
+		<div class="uploader" onclick="$('#filePhoto').click()">
+			<input type="file" name="userprofile_picture" id="filePhoto" name='mypics' require multiple/>
+		</div>
+		<input type="submit" value='Upload Pics' />
+	</form>
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
-	<script>
-		var imageLoader = document.getElementById('filePhoto');
-		imageLoader.addEventListener('change', handleImage, false);
-		
-		function handleImages(e) {
-			$('.uploader img').remove();
-			for (var i = 0; i < e.target.files.length; i++) {
-				var reader = new FileReader();
-				reader.onload = function(event) {
-					var $img = $('<img/>');
-					$img.attr('src', event.target.result);
-					$('.uploader').append($img);
-				}
-				reader.readAsDataURL(e.target.files[i]);
+<script>
+	var imageLoader = document.getElementById('filePhoto');
+	imageLoader.addEventListener('change', handleImages, false);
+
+	function handleImages(e) {
+		$('.uploader img').remove();
+		for (var i = 0; i < e.target.files.length; i++) {
+			var reader = new FileReader();
+			reader.onload = function(event) {
+				var img = '<img  src=\'' + event.target.result + '\' />';
+				// var $img = $('<img/>');
+				// $img.attr('src', event.target.result);
+				$('.uploader').append(img);
 			}
+			reader.readAsDataURL(e.target.files[i]);
 		}
-	</script>
+	}
+</script>
+
 </html>
