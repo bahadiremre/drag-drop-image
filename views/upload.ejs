@@ -2,62 +2,62 @@
 <html>
 
 <head>
-	<style>
-		.uploader {
-			position: relative;
-			overflow: hidden;
-			width: 300px;
-			height: 300px;
-			background: #466;
-			border: 2px dashed #e8e8e8;
-		}
-
-		#filePhoto {
-			position: absolute;
-			width: 400px;
-			height: 400px;
-			top: -50px;
-			left: 0;
-			z-index: 2;
-			opacity: 0;
-			cursor: pointer;
-		}
-
-		.uploader img {
-			width: 100px;
-			margin: 2px;
-			float: left;
-		}
-	</style>
+    <style>
+        .uploader {
+            position: relative;
+            overflow: hidden;
+            width: 300px;
+            height: 300px;
+            background: #466;
+            border: 2px dashed #e8e8e8;
+        }
+        
+        #filePhoto {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            top: -50px;
+            left: 0;
+            z-index: 2;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .uploader img {
+            width: 100px;
+            margin: 2px;
+            float: left;
+        }
+    </style>
 
 </head>
 
 <body>
-	<form enctype="multipart/form-data" action="upload" method="post">
-		<div class="uploader" onclick="$('#filePhoto').click()">
-			<input type="file" name="userprofile_picture" id="filePhoto" name='mypics' require multiple/>
-		</div>
-		<input type="submit" value='Upload Pics' />
-	</form>
+    <form enctype="multipart/form-data" action="upload" method="post">
+        <div class="uploader" onclick="$('#filePhoto').click()">
+            <input type="file" id="filePhoto" name='mypics' require multiple/>
+        </div>
+        <input type="submit" value='Upload Pics' />
+    </form>
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
 <script>
-	var imageLoader = document.getElementById('filePhoto');
-	imageLoader.addEventListener('change', handleImages, false);
+    var imageLoader = document.getElementById('filePhoto');
+    imageLoader.addEventListener('change', handleImages, false);
 
-	function handleImages(e) {
-		$('.uploader img').remove();
-		for (var i = 0; i < e.target.files.length; i++) {
-			var reader = new FileReader();
-			reader.onload = function(event) {
-				var img = '<img  src=\'' + event.target.result + '\' />';
-				// var $img = $('<img/>');
-				// $img.attr('src', event.target.result);
-				$('.uploader').append(img);
-			}
-			reader.readAsDataURL(e.target.files[i]);
-		}
-	}
+    function handleImages(e) {
+        $('.uploader img').remove();
+        for (var i = 0; i < e.target.files.length; i++) {
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                var img = '<img  src=\'' + event.target.result + '\' />';
+                // var $img = $('<img/>');
+                // $img.attr('src', event.target.result);
+                $('.uploader').append(img);
+            }
+            reader.readAsDataURL(e.target.files[i]);
+        }
+    }
 </script>
 
 </html>

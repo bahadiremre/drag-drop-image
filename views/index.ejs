@@ -2,59 +2,131 @@
 <html>
 
 <head>
-	<style>
-		body {
-			background-color: #eee;
-		}
+    <style>
+        body {
+            background-color: #eee;
+        }
+        
+        .divImgContainer {
+            float: left;
+            width: 100px;
+            height: 100px;
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid black;
+        }
+        
+        .uploader {
+            position: relative;
+            overflow: hidden;
+            width: 300px;
+            height: 300px;
+            background: #466;
+            border: 2px dashed #e8e8e8;
+        }
+        
+        #filePhoto {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            top: -50px;
+            left: 0;
+            z-index: 2;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .uploader img {
+            width: 100px;
+            margin: 2px;
+            float: left;
+        }
+        
+        img {
+            width: 100%;
+        }
+    </style>
+    <script>
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
 
-		.divImgContainer {
-			float: left;
-			width: 100px;
-			height: 100px;
-			margin: 10px;
-			padding: 10px;
-			border: 1px solid black;
-		}
-		img{
-			width:100%;
-		}
-	</style>
-	<script>
-		function allowDrop(ev) {
-			ev.preventDefault();
-		}
+        function drag(ev) {
+            ev.dataTransfer.setData('imageId', ev.currentTarget.id);
+            ev.dataTransfer.setData('parentDivId', ev.currentTarget.parentElement.id);
+        }
 
-		function drag(ev) {
-			ev.dataTransfer.setData('imageId', ev.currentTarget.id);
-			ev.dataTransfer.setData('parentDivId', ev.currentTarget.parentElement.id);
-		}
+        function drop(ev) {
+            ev.preventDefault();
+            var imageId = ev.dataTransfer.getData('imageId'),
+                parentDivId = ev.dataTransfer.getData('parentDivId');
+            document.getElementById(parentDivId).appendChild(ev.currentTarget.querySelectorAll('img')[0])
+            ev.currentTarget.appendChild(document.getElementById(imageId));
+        }
 
-		function drop(ev) {
-			ev.preventDefault();
-			var imageId = ev.dataTransfer.getData('imageId'),
-				parentDivId = ev.dataTransfer.getData('parentDivId');
-			document.getElementById(parentDivId).appendChild(ev.currentTarget.querySelectorAll('img')[0])
-			ev.currentTarget.appendChild(document.getElementById(imageId));
-		}
-	</script>
+        function sendOrder(){
+            var imgArray = $('.divImgContainer img');
+            var imgObj = {};
+
+            for(let i = 0;i<imgArray.length;i++){
+                imgObj[i] = $('.divImgContainer img')[i].src;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: '/',
+                data: {imgObj},
+                error: function(xhr,status,error){
+                    console.log(error);
+                }
+            });
+        }
+    </script>
 </head>
 
 <body>
 
-	<h1>Drag and Drop</h1>
-	
-	
-	<h2> Change Order </h2>
-	<%  if(images){
+    <h1>Drag and Drop</h1>
+
+    <form enctype="multipart/form-data" action="upload" method="post">
+        <div class="uploader" onclick="$('#filePhoto').click()">
+            <input type="file" id="filePhoto" name='mypics' require multiple/>
+        </div>
+        <input type="submit" value='Upload Pics' />
+    </form>
+
+
+    <h2> Change Order </h2>
+    <%  if(images){
             images.forEach((image,index) => { %>
 
-		<div ondrop="drop(event)" ondragover="allowDrop(event)" class='divImgContainer' id='div<%= index+1 %>'>
-			<img src="<%= "images/" + image %>" draggable="true" ondragstart="drag(event)" id="drag<%= image.replace('.jpg','') %>">
-		</div>
+        <div ondrop="drop(event)" ondragover="allowDrop(event)" class='divImgContainer' id='div<%= index+1 %>'>
+            <img src="<%= "images/" + image %>" draggable="true" ondragstart="drag(event)" id="drag<%= image.replace('.jpg','') %>">
+        </div>
 
-		<%  });
+        <%  });
             } %>
-
+    
+    <button onclick='sendOrder()'>Sırayı Kaydet</button>
 </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+<script>
+    var imageLoader = document.getElementById('filePhoto');
+    imageLoader.addEventListener('change', handleImages, false);
+
+    function handleImages(e) {
+        $('.uploader img').remove();
+        for (var i = 0; i < e.target.files.length; i++) {
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                var img = '<img  src=\'' + event.target.result + '\' />';
+                // var $img = $('<img/>');
+                // $img.attr('src', event.target.result);
+                $('.uploader').append(img);
+            }
+            reader.readAsDataURL(e.target.files[i]);
+        }
+    }
+</script>
 
 </html>
